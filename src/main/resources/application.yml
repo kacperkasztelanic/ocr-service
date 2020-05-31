@@ -1,0 +1,24 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: ocr-service
+  data:
+    mongodb:
+      host: ${MONGO_HOST:localhost}
+      port: ${MONGO_POST:27017}
+      database: ${MONGO_DB:ocr-service}
+      username: ${MONGO_USER:root}
+      password: ${MONGO_PASS:pass}
+      authentication-database: ${MONGO_AUTH_DB:admin}
+app:
+  minio:
+    host: ${MINIO_HOST:localhost}
+    port: ${MINIO_PORT:9000}
+    ssl: ${MINIO_SSL:false}
+    access-key: ${MINIO_ACCESS_KEY:root}
+    secret-key: ${MINIO_SECRET_KEY:P@ssw0rd}
+    bucket: ${MINIO_BUCKET:ocr-service}
+  storage-time:
+    job-days: 1
+    result-days: 3
