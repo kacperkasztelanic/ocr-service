@@ -25,17 +25,21 @@ import lombok.experimental.FieldDefaults;
 @AccessType(AccessType.Type.PROPERTY)
 public class JobEntity extends AbstractAuditingEntity {
 
-    @NotNull String input;
+    @NotNull
+    String input;
+    @NotNull
+    String contentType;
 
-    public static JobEntity of(String id, Instant creationTime, Instant expirationTime, String input) {
-        return new JobEntity(id, creationTime, expirationTime, input);
+    public static JobEntity of(String id, Instant creationTime, String input, String contentType) {
+        return new JobEntity(id, creationTime, input, contentType);
     }
 
     @Builder
     @JsonCreator
     @PersistenceConstructor
-    public JobEntity(String id, Instant creationTime, Instant expirationTime, String input) {
-        super(id, creationTime, expirationTime);
+    public JobEntity(String id, Instant creationTime, String input, String contentType) {
+        super(id, creationTime);
         this.input = input;
+        this.contentType = contentType;
     }
 }

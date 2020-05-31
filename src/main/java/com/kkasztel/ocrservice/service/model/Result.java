@@ -20,7 +20,6 @@ public class Result {
 
     String id;
     Instant creationTime;
-    Instant expirationTime;
     String jobId;
     String results;
     String exception;

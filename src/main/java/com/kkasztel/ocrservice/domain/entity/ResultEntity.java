@@ -30,17 +30,15 @@ public class ResultEntity extends AbstractAuditingEntity {
     String results;
     String exception;
 
-    public static ResultEntity of(String id, Instant creationTime, Instant expirationTime, String jobId, String results,
-            String exception) {
-        return new ResultEntity(id, creationTime, expirationTime, jobId, results, exception);
+    public static ResultEntity of(String id, Instant creationTime, String jobId, String results, String exception) {
+        return new ResultEntity(id, creationTime, jobId, results, exception);
     }
 
     @Builder
     @JsonCreator
     @PersistenceConstructor
-    public ResultEntity(String id, Instant creationTime, Instant expirationTime, String jobId, String results,
-            String exception) {
-        super(id, creationTime, expirationTime);
+    public ResultEntity(String id, Instant creationTime, String jobId, String results, String exception) {
+        super(id, creationTime);
         this.jobId = jobId;
         this.results = results;
         this.exception = exception;

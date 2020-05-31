@@ -1,12 +1,14 @@
 package com.kkasztel.ocrservice.web;
 
-import com.kkasztel.ocrservice.config.AppProps;
 import com.kkasztel.ocrservice.service.ResultService;
 import com.kkasztel.ocrservice.service.UuidSupplier;
 import com.kkasztel.ocrservice.service.model.Job;
 import com.kkasztel.ocrservice.service.model.Result;
 import com.kkasztel.ocrservice.service.storage.FileService;
 
+import org.apache.tika.config.TikaConfig;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.mime.MimeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,15 +18,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.net.URL;
-import java.time.Duration;
 import java.time.Instant;
 
 import io.vavr.CheckedFunction1;
+import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 
 import static io.vavr.API.CheckedFunction;
 import static io.vavr.API.Try;
+import static io.vavr.API.Tuple;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.http.ResponseEntity.accepted;
@@ -39,15 +43,15 @@ public class OcrResource {
     private final FileService fileService;
     private final ResultService resultService;
     private final UuidSupplier uuidSupplier;
-    private final AppProps appProps;
+    private final TikaConfig tika;
 
     @Autowired
     public OcrResource(FileService fileService, ResultService resultService, UuidSupplier uuidSupplier,
-            AppProps appProps) {
+            TikaConfig tika) {
         this.fileService = fileService;
         this.uuidSupplier = uuidSupplier;
         this.resultService = resultService;
-        this.appProps = appProps;
+        this.tika = tika;
     }
 
     @PostMapping("/")
@@ -58,8 +62,11 @@ public class OcrResource {
         String id = uuidSupplier.get();
         Instant now = Instant.now();
         return Try(file::getBytes)//
-                .flatMap(b -> fileService.save(b).toTry())//
-                .map(i -> Job.of(id, now, now.plus(Duration.ofDays(appProps.getStorageTime().getJobDays())), i))//
+                .flatMap(b -> fileService.save(b)//
+                        .toTry()//
+                        .flatMapTry(i -> probeFileExtension(b).map(e -> Tuple(i, e)))//
+                        .map(p -> Job.of(id, now, p._1, p._2))//
+                )//
                 .mapTry(urlFunction)//
                 .onFailure(t -> log.error(t.getMessage(), t))//
                 .map(u -> accepted().body(u))//
@@ -72,5 +79,12 @@ public class OcrResource {
                 .flatMap(Result::getResults)//
                 .map(ResponseEntity::ok)//
                 .getOrElse(() -> notFound().build());
+    }
+
+    private Try<String> probeFileExtension(byte[] file) {
+        return Try(() -> new ByteArrayInputStream(file))//
+                .mapTry(s -> tika.getMimeRepository().detect(s, new Metadata()))//
+                .mapTry(t -> tika.getMimeRepository().forName(t.toString()))//
+                .map(MimeType::getExtension);
     }
 }

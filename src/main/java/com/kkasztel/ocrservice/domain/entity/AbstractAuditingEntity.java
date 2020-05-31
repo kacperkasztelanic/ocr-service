@@ -26,7 +26,4 @@ public abstract class AbstractAuditingEntity {
     @NotNull
     @Indexed
     Instant creationTime;
-    @NotNull
-    @Indexed
-    Instant expirationTime;
 }

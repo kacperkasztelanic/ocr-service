@@ -17,6 +17,6 @@ public class Job {
 
     String id;
     Instant creationTime;
-    Instant expirationTime;
     String input;
+    String contentType;
 }
