@@ -1,8 +1,6 @@
-package com.kkasztel.ocrservice.service.impl;
+package com.kkasztel.ocrservice.service.result;
 
 import com.kkasztel.ocrservice.domain.repository.ResultRepository;
-import com.kkasztel.ocrservice.service.ResultService;
-import com.kkasztel.ocrservice.service.mapper.ResultMapper;
 import com.kkasztel.ocrservice.service.model.Result;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,7 @@ import org.springframework.stereotype.Service;
 import io.vavr.control.Option;
 
 @Service
-public class ResultServiceImpl implements ResultService {
+class ResultServiceImpl implements ResultService {
 
     private final ResultRepository repository;
     private final ResultMapper mapper;

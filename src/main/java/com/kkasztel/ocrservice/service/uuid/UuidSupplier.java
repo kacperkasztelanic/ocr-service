@@ -1,4 +1,4 @@
-package com.kkasztel.ocrservice.service;
+package com.kkasztel.ocrservice.service.uuid;
 
 import java.util.function.Supplier;
 

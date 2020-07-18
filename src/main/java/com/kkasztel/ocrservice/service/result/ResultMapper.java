@@ -1,4 +1,4 @@
-package com.kkasztel.ocrservice.service.mapper;
+package com.kkasztel.ocrservice.service.result;
 
 import com.kkasztel.ocrservice.domain.entity.ResultEntity;
 import com.kkasztel.ocrservice.service.model.Result;

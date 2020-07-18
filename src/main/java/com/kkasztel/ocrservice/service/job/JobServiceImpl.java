@@ -1,8 +1,6 @@
-package com.kkasztel.ocrservice.service.impl;
+package com.kkasztel.ocrservice.service.job;
 
 import com.kkasztel.ocrservice.domain.repository.JobRepository;
-import com.kkasztel.ocrservice.service.JobService;
-import com.kkasztel.ocrservice.service.mapper.JobMapper;
 import com.kkasztel.ocrservice.service.model.Job;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,7 @@ import org.springframework.stereotype.Service;
 import io.vavr.control.Option;
 
 @Service
-public class JobServiceImpl implements JobService {
+class JobServiceImpl implements JobService {
 
     private final JobRepository repository;
     private final JobMapper mapper;

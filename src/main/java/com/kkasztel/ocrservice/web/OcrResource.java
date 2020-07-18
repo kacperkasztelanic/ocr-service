@@ -1,7 +1,7 @@
 package com.kkasztel.ocrservice.web;
 
-import com.kkasztel.ocrservice.service.ResultService;
-import com.kkasztel.ocrservice.service.UuidSupplier;
+import com.kkasztel.ocrservice.service.result.ResultService;
+import com.kkasztel.ocrservice.service.uuid.UuidSupplier;
 import com.kkasztel.ocrservice.service.model.Job;
 import com.kkasztel.ocrservice.service.model.Result;
 import com.kkasztel.ocrservice.service.storage.FileService;
@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.net.URL;
+import java.time.Clock;
 import java.time.Instant;
 
 import io.vavr.CheckedFunction1;
@@ -43,14 +44,16 @@ public class OcrResource {
     private final FileService fileService;
     private final ResultService resultService;
     private final UuidSupplier uuidSupplier;
+    private final Clock clock;
     private final TikaConfig tika;
 
     @Autowired
-    public OcrResource(FileService fileService, ResultService resultService, UuidSupplier uuidSupplier,
+    public OcrResource(FileService fileService, ResultService resultService, UuidSupplier uuidSupplier, Clock clock,
             TikaConfig tika) {
         this.fileService = fileService;
         this.uuidSupplier = uuidSupplier;
         this.resultService = resultService;
+        this.clock = clock;
         this.tika = tika;
     }
 
@@ -60,7 +63,7 @@ public class OcrResource {
                 j -> linkTo(methodOn(OcrResource.class).check(j.getId())).toUri().toURL()//
         );
         String id = uuidSupplier.get();
-        Instant now = Instant.now();
+        Instant now = clock.instant();
         return Try(file::getBytes)//
                 .flatMap(b -> fileService.save(b)//
                         .toTry()//

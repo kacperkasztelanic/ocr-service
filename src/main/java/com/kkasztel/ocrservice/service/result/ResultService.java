@@ -1,4 +1,4 @@
-package com.kkasztel.ocrservice.service;
+package com.kkasztel.ocrservice.service.result;
 
 import com.kkasztel.ocrservice.service.model.Result;
 

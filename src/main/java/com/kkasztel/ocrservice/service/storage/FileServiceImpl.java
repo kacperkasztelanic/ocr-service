@@ -1,10 +1,8 @@
-package com.kkasztel.ocrservice.service.storage.impl;
+package com.kkasztel.ocrservice.service.storage;
 
 import com.kkasztel.ocrservice.config.AppProps;
 import com.kkasztel.ocrservice.exception.FileStorageException;
-import com.kkasztel.ocrservice.service.UuidSupplier;
-import com.kkasztel.ocrservice.service.storage.FileService;
-import com.kkasztel.ocrservice.service.storage.FileStorageService;
+import com.kkasztel.ocrservice.service.uuid.UuidSupplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +11,7 @@ import io.vavr.control.Either;
 import io.vavr.control.Option;
 
 @Service
-public class FileServiceImpl implements FileService {
+class FileServiceImpl implements FileService {
 
     private final FileStorageService fileStorageService;
     private final UuidSupplier uuidSupplier;

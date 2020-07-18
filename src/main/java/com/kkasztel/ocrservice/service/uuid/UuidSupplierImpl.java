@@ -1,13 +1,11 @@
-package com.kkasztel.ocrservice.service.impl;
-
-import com.kkasztel.ocrservice.service.UuidSupplier;
+package com.kkasztel.ocrservice.service.uuid;
 
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
-public class UuidSupplierImpl implements UuidSupplier {
+class UuidSupplierImpl implements UuidSupplier {
 
     @Override
     public String get() {

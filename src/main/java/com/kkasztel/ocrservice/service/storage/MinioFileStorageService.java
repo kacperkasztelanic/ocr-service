@@ -1,7 +1,6 @@
-package com.kkasztel.ocrservice.service.storage.impl;
+package com.kkasztel.ocrservice.service.storage;
 
 import com.kkasztel.ocrservice.exception.FileStorageException;
-import com.kkasztel.ocrservice.service.storage.FileStorageService;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ import io.vavr.control.Option;
 import static io.vavr.API.Try;
 
 @Service
-public class MinioFileStorageService implements FileStorageService {
+class MinioFileStorageService implements FileStorageService {
 
     private final MinioClient minioClient;
 
