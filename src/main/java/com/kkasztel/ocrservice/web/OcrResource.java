@@ -1,5 +1,7 @@
 package com.kkasztel.ocrservice.web;
 
+import com.kkasztel.ocrservice.messaging.JobQueue;
+import com.kkasztel.ocrservice.service.job.JobService;
 import com.kkasztel.ocrservice.service.result.ResultService;
 import com.kkasztel.ocrservice.service.uuid.UuidSupplier;
 import com.kkasztel.ocrservice.service.model.Job;
@@ -42,17 +44,21 @@ import static org.springframework.http.ResponseEntity.status;
 public class OcrResource {
 
     private final FileService fileService;
+    private final JobService jobService;
     private final ResultService resultService;
     private final UuidSupplier uuidSupplier;
+    private final JobQueue jobQueue;
     private final Clock clock;
     private final TikaConfig tika;
 
     @Autowired
-    public OcrResource(FileService fileService, ResultService resultService, UuidSupplier uuidSupplier, Clock clock,
-            TikaConfig tika) {
+    public OcrResource(FileService fileService, JobService jobService, ResultService resultService,
+            UuidSupplier uuidSupplier, JobQueue jobQueue, Clock clock, TikaConfig tika) {
         this.fileService = fileService;
+        this.jobService = jobService;
         this.uuidSupplier = uuidSupplier;
         this.resultService = resultService;
+        this.jobQueue = jobQueue;
         this.clock = clock;
         this.tika = tika;
     }
@@ -70,6 +76,8 @@ public class OcrResource {
                         .flatMapTry(i -> probeFileExtension(b).map(e -> Tuple(i, e)))//
                         .map(p -> Job.of(id, now, p._1, p._2))//
                 )//
+                .map(jobService::save)//
+                .peek(jobQueue::enqueueJob)//
                 .mapTry(urlFunction)//
                 .onFailure(t -> log.error(t.getMessage(), t))//
                 .map(u -> accepted().body(u))//
