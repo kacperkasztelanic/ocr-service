@@ -20,9 +20,24 @@ public class Result {
 
     String id;
     Instant creationTime;
-    String jobId;
     String results;
     String exception;
+
+    public static Result success(String id, Instant creationTime, String results) {
+        return Result.builder()//
+                .id(id)//
+                .creationTime(creationTime)//
+                .results(results)//
+                .build();
+    }
+
+    public static Result failure(String id, Instant creationTime, String exception) {
+        return Result.builder()//
+                .id(id)//
+                .creationTime(creationTime)//
+                .exception(exception)//
+                .build();
+    }
 
     public Option<String> getResults() {
         return Option(results);
