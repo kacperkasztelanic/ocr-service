@@ -5,7 +5,7 @@ import com.kkasztel.ocrservice.exception.FileStorageException;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 
-public interface FileStorageService {
+interface FileStorageService {
 
     Either<FileStorageException, byte[]> store(byte[] file, String name, String directory);
 

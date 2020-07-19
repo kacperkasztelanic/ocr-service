@@ -10,7 +10,7 @@ import org.mapstruct.Named;
 import io.vavr.control.Option;
 
 @Mapper(componentModel = "spring")
-public interface ResultMapper {
+interface ResultMapper {
 
     @Mapping(source = "results", target = "results", qualifiedByName = "unwrap")
     @Mapping(source = "exception", target = "exception", qualifiedByName = "unwrap")

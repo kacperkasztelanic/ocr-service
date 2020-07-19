@@ -6,7 +6,7 @@ import com.kkasztel.ocrservice.service.model.Job;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface JobMapper {
+interface JobMapper {
 
     JobEntity jobToJobEntity(Job job);
 
