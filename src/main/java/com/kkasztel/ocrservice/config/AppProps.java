@@ -1,5 +1,6 @@
 package com.kkasztel.ocrservice.config;
 
+import com.kkasztel.ocrservice.config.property.Messaging;
 import com.kkasztel.ocrservice.config.property.Minio;
 import com.kkasztel.ocrservice.config.property.StorageTime;
 
@@ -15,4 +16,5 @@ public class AppProps {
 
     Minio minio;
     StorageTime storageTime;
+    Messaging messaging;
 }

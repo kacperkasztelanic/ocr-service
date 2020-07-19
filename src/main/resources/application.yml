@@ -3,6 +3,17 @@ server:
 spring:
   application:
     name: ocr-service
+  main:
+    allow-bean-definition-overriding: true
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    listener:
+      simple:
+        default-requeue-rejected: false
+        prefetch: 1
   data:
     mongodb:
       host: ${MONGO_HOST:localhost}
@@ -12,6 +23,8 @@ spring:
       password: ${MONGO_PASS:pass}
       authentication-database: ${MONGO_AUTH_DB:admin}
 app:
+  messaging:
+    concurrency: ${CONCURRENCY:1}
   minio:
     host: ${MINIO_HOST:localhost}
     port: ${MINIO_PORT:9000}
