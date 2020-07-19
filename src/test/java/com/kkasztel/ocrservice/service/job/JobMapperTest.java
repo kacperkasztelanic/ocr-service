@@ -1,7 +1,6 @@
-package com.kkasztel.ocrservice.service.mapper;
+package com.kkasztel.ocrservice.service.job;
 
 import com.kkasztel.ocrservice.domain.entity.JobEntity;
-import com.kkasztel.ocrservice.service.job.JobMapper;
 import com.kkasztel.ocrservice.service.model.Job;
 
 import org.junit.jupiter.api.Test;
