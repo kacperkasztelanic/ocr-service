@@ -1,10 +1,8 @@
 package com.kkasztel.ocrservice.service.ocr;
 
-import com.kkasztel.ocrservice.exception.OcrException;
-
-import io.vavr.control.Either;
+import com.kkasztel.ocrservice.service.model.Result;
 
 public interface OcrService {
 
-    Either<OcrException, String> doOcr();
+    Result doOcr(String jobId);
 }
