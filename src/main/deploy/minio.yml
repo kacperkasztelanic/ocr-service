@@ -1,0 +1,13 @@
+version: '3.3'
+services:
+  ocr-service_minio:
+    image: minio/minio:latest
+    container_name: ocr-service_minio
+    ports:
+      - 9000:9000
+    volumes:
+      - /home/ocr-service/minio:/data
+    environment:
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY_ENV}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY_ENV}
+    command: server /data

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+ARTIFACTS=/home/ocr-service/artifacts
+
+ln -sf /data/ocr-service/settings/.env $ARTIFACTS/.env
+sed -i 's/${RABBITMQ_USERNAME_ENV}/'"$(grep RABBITMQ_USERNAME_ENV= $ARTIFACTS/.env | cut -d '=' -f2-)"'/g' $ARTIFACTS/rabbitmq.yml
+sed -i 's/${RABBITMQ_PASSWORD_ENV}/'"$(grep RABBITMQ_PASSWORD_ENV= $ARTIFACTS/.env | cut -d '=' -f2-)"'/g' $ARTIFACTS/rabbitmq.yml
+sed -i 's/${MONGODB_USERNAME_ENV}/'"$(grep MONGODB_USERNAME_ENV= $ARTIFACTS/.env | cut -d '=' -f2-)"'/g' $ARTIFACTS/mongodb.yml
+sed -i 's/${MONGODB_PASSWORD_ENV}/'"$(grep MONGODB_PASSWORD_ENV= $ARTIFACTS/.env | cut -d '=' -f2-)"'/g' $ARTIFACTS/mongodb.yml
+sed -i 's/${MINIO_ACCESS_KEY_ENV}/'"$(grep MINIO_ACCESS_KEY_ENV= $ARTIFACTS/.env | cut -d '=' -f2-)"'/g' $ARTIFACTS/minio.yml
+sed -i 's/${MINIO_SECRET_KEY_ENV}/'"$(grep MINIO_SECRET_KEY_ENV= $ARTIFACTS/.env | cut -d '=' -f2-)"'/g' $ARTIFACTS/minio.yml
+
+docker build -t ocr-service:latest $ARTIFACTS
+docker-compose -f $ARTIFACTS/app.yml down
+docker-compose -f $ARTIFACTS/app.yml up -d
+
+docker images --filter "dangling=true" -q --no-trunc | while IFS='' read -r line
+do
+  docker rmi "$line"
+done

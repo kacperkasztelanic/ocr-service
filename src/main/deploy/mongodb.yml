@@ -1,0 +1,12 @@
+version: '2'
+services:
+  ocr-service_mongodb:
+    image: mongo:4.0.0
+    container_name: ocr-service_mongodb
+    ports:
+      - 27017:27017
+    volumes:
+      - /data/ocr-service/db:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGODB_USERNAME_ENV}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD_ENV}

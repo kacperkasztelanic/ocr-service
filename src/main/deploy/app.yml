@@ -1,0 +1,18 @@
+version: '2'
+services:
+  ocr-service_app:
+    extends:
+      file: ocr-service.yml
+      service: ocr-service_app
+  ocr-service_mongodb:
+    extends:
+      file: mongodb.yml
+      service: ocr-service_mongodb
+  ocr-service_minio:
+    extends:
+      file: minio.yml
+      service: ocr-service_minio
+  ocr-service_rabbitmq:
+    extends:
+      file: rabbitmq.yml
+      service: ocr-service_rabbitmq

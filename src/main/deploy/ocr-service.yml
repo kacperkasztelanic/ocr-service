@@ -1,0 +1,16 @@
+version: '2'
+services:
+  ocr-service_app:
+    image: ocr-service
+    container_name: ocr-service_app
+    ports:
+      - 8080:8080
+    volumes:
+      - /data/ocr-service/logs:/home/ocr-service/logs
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - RABBITMQ_HOST=ocr-service_rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME_ENV}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD_ENV}
+      - CONCURRENCY=5
