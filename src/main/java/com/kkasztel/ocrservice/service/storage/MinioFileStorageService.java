@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 
 import io.minio.MinioClient;
+import io.minio.PutObjectOptions;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 
@@ -30,7 +31,12 @@ class MinioFileStorageService implements FileStorageService {
             if (!minioClient.bucketExists(directory)) {
                 minioClient.makeBucket(directory);
             }
-            minioClient.putObject(directory, name, new ByteArrayInputStream(file), null);
+            minioClient.putObject(//
+                    directory,//
+                    name,//
+                    new ByteArrayInputStream(file),//
+                    new PutObjectOptions(file.length, -1)//
+            );
             return file;
         }).toEither().mapLeft(FileStorageException::new);
     }
@@ -39,7 +45,7 @@ class MinioFileStorageService implements FileStorageService {
     public Either<FileStorageException, Option<byte[]>> load(String name, String directory) {
         return Try(() -> {
             if (!minioClient.bucketExists(directory)) {
-                return null;
+                throw new FileStorageException("Requested bucket does not exist: " + directory);
             }
             return IOUtils.toByteArray(minioClient.getObject(directory, name));
         }).map(Option::of).toEither().mapLeft(FileStorageException::new);
