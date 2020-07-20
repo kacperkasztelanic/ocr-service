@@ -17,7 +17,7 @@ import static com.kkasztel.ocrservice.config.RabbitConfig.JOB_QUEUE;
 @RabbitListener(//
         queues = JOB_QUEUE,//
         id = JOB_LISTENER,//
-        autoStartup = "false",//
+        autoStartup = "true",//
         concurrency = "${app.messaging.concurrency}"//
 )
 public class JobQueueListener {
