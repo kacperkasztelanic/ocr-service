@@ -26,6 +26,7 @@
         <tika-core.version>1.24.1</tika-core.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <rabbitmq-mock.version>1.1.0</rabbitmq-mock.version>
+        <archunit.version>0.14.1</archunit.version>
 
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
@@ -151,6 +152,12 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit</artifactId>
+            <scope>test</scope>
+            <version>${archunit.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.fridujo</groupId>
