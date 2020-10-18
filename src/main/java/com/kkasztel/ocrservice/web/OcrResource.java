@@ -3,7 +3,6 @@ package com.kkasztel.ocrservice.web;
 import com.kkasztel.ocrservice.exception.FileStorageException;
 import com.kkasztel.ocrservice.exception.FileTypeProbeException;
 import com.kkasztel.ocrservice.exception.OcrException;
-import com.kkasztel.ocrservice.messaging.JobQueue;
 import com.kkasztel.ocrservice.service.job.JobService;
 import com.kkasztel.ocrservice.service.model.Job;
 import com.kkasztel.ocrservice.service.model.Result;
@@ -51,18 +50,16 @@ public class OcrResource {
     private final JobService jobService;
     private final ResultService resultService;
     private final UuidSupplier uuidSupplier;
-    private final JobQueue jobQueue;
     private final Clock clock;
     private final TikaConfig tika;
 
     @Autowired
     public OcrResource(FileService fileService, JobService jobService, ResultService resultService,
-            UuidSupplier uuidSupplier, JobQueue jobQueue, Clock clock, TikaConfig tika) {
+            UuidSupplier uuidSupplier, Clock clock, TikaConfig tika) {
         this.fileService = fileService;
         this.jobService = jobService;
         this.uuidSupplier = uuidSupplier;
         this.resultService = resultService;
-        this.jobQueue = jobQueue;
         this.clock = clock;
         this.tika = tika;
     }
@@ -80,8 +77,7 @@ public class OcrResource {
                         .flatMap(i -> probeFileExtension(b).mapLeft(OcrException.class::cast).map(e -> Tuple(i, e)))//
                         .map(p -> Job.of(id, now, p._1, p._2))//
                 )//
-                .map(jobService::save)//
-                .peek(jobQueue::enqueueJob)//
+                .map(jobService::enqueue)//
                 .flatMap(j -> Try(() -> urlFunction.apply(j))//
                         .toEither().mapLeft(OcrException::new)//
                 )//

@@ -19,7 +19,8 @@ class RabbitJobQueue implements JobQueue {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void enqueueJob(Job job) {
+    public Job enqueueJob(Job job) {
         rabbitTemplate.convertAndSend(JOB_EXCHANGE, JOB_KEY, job.getId());
+        return job;
     }
 }

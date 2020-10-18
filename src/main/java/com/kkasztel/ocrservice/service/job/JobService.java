@@ -6,7 +6,7 @@ import io.vavr.control.Option;
 
 public interface JobService {
 
-    Job save(Job job);
+    Job enqueue(Job job);
 
     Option<Job> findById(String id);
 }
