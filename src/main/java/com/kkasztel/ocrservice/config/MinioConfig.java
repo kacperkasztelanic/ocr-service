@@ -7,8 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.minio.MinioClient;
-import io.minio.errors.InvalidEndpointException;
-import io.minio.errors.InvalidPortException;
 
 @Configuration
 public class MinioConfig {
@@ -21,14 +19,11 @@ public class MinioConfig {
     }
 
     @Bean
-    public MinioClient minioClient() throws InvalidPortException, InvalidEndpointException {
+    public MinioClient minioClient() {
         Minio minio = appProps.getMinio();
-        return new MinioClient(//
-                minio.getHost(),//
-                minio.getPort(),//
-                minio.getAccessKey(),//
-                minio.getSecretKey(),//
-                minio.getSsl()//
-        );
+        return MinioClient.builder()//
+                .endpoint(minio.getHost(), minio.getPort(), minio.getSsl())//
+                .credentials(minio.getAccessKey(), minio.getSecretKey())//
+                .build();
     }
 }

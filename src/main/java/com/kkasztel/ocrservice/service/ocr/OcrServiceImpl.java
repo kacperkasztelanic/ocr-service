@@ -50,7 +50,7 @@ class OcrServiceImpl implements OcrService {
     private Either<OcrException, String> doOcrInternal(String jobId) {
         return jobService.findById(jobId).toEither(() -> (OcrException) new JobNotExistException(jobId))//
                 .flatMap(j -> fileService.load(j.getInput()).mapLeft(OcrException.class::cast)//
-                        .flatMap(o -> o.toEither(() -> (OcrException) new FileNotExistException(j.getInput())))//
+                        .flatMap(o -> o.toEither(() -> new FileNotExistException(j.getInput())))//
                         .flatMap(ocrEngine::doOcr)//
                 );
     }
